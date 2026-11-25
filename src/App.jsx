@@ -19,8 +19,13 @@ function ItemCard({ item, added, travelers, onAdd }) {
       <div className="card-foot">
         <strong>{formatUSD(item.price)}</strong>
         {item.perPerson && travelers > 1 && <span className="meta">{formatUSD(itemTotal(item, travelers))} total</span>}
-        <button className="btn" onClick={() => onAdd(item)} disabled={added}>
-          {added ? 'Added' : 'Add to trip'}
+        <button
+          className="btn"
+          aria-label={added ? `${item.name} added` : `Add ${item.name} to trip`}
+          onClick={() => onAdd(item)}
+          disabled={added}
+        >
+          {added ? '✓' : '+ Add'}
         </button>
       </div>
     </article>

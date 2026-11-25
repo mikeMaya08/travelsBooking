@@ -16,6 +16,28 @@ export class TripPlannerPage {
     // Confirmation
     this.confirmation = page.getByRole('status');
     this.bookingCode = page.getByTestId('booking-code');
+
+    // Trip setup and catalog filters
+    this.travelersInput = page.getByLabel('Travelers');
+    this.searchInput = page.getByLabel('Search');
+    this.noResultsMessage = page.getByText('No results for your search.');
+    this.catalogCards = page.getByRole('article');
+  }
+
+  async setTravelers(count) {
+    await this.travelersInput.fill(String(count));
+  }
+
+  async search(term) {
+    await this.searchInput.fill(term);
+  }
+
+  async clearSearch() {
+    await this.searchInput.fill('');
+  }
+
+  async selectCategory(category) {
+    await this.page.getByRole('tab', { name: category }).click();
   }
 
   async open() {

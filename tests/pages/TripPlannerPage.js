@@ -18,6 +18,10 @@ export class TripPlannerPage {
     this.bookingCode = page.getByTestId('booking-code');
 
     // Trip setup and catalog filters
+    this.destinationSelect = page.getByLabel('Destination');
+    this.arrivalInput = page.getByLabel('Arrival');
+    this.departureInput = page.getByLabel('Departure');
+    this.tripSearchButton = page.getByRole('button', { name: 'Search', exact: true });
     this.travelersInput = page.getByLabel('Travelers');
     this.searchInput = page.getByLabel('Search');
     this.noResultsMessage = page.getByText('No results for your search.');

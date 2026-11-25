@@ -102,6 +102,13 @@ export class TripPlannerPage {
     await this.emailInput.fill(email);
   }
 
+  // Demo (approved) card; the fields auto-format and expiry accepts digits only ("1230" becomes 12/30).
+  async fillCardDetails({ number = '4242 4242 4242 4242', expiry = '1230', cvc = '123' } = {}) {
+    await this.cardNumberInput.fill(number);
+    await this.expiryInput.fill(expiry);
+    await this.cvcInput.fill(cvc);
+  }
+
   async pay() {
     await this.payButton.click();
   }

@@ -15,8 +15,21 @@ export async function searchItems({ city, cat, q = '', sort = 'relevance' }) {
   return out;
 }
 
-export async function createBooking({ trip, traveler, total }) {
+// FAKE payment gateway. Nothing is charged and card data never leaves the browser.
+// Demo cards: 4242 4242 4242 4242 -> approved, 4000 0000 0000 0002 -> declined.
+export async function processPayment({ amount, card }) {
+  await wait(1500);
+  const digits = card.number.replace(/\s/g, '');
+  if (digits.endsWith('0002')) {
+    const err = new Error('Your card was declined. Please try another card.');
+    err.code = 'card_declined';
+    throw err;
+  }
+  return { id: 'pay_' + Math.random().toString(36).slice(2, 10), last4: digits.slice(-4), amount };
+}
+
+export async function createBooking({ trip, traveler, total, payment }) {
   await wait(400);
   const code = 'WAY-' + Math.random().toString(36).slice(2, 8).toUpperCase();
-  return { code, count: trip.length, total, email: traveler.email };
+  return { code, count: trip.length, total, email: traveler.email, last4: payment.last4 };
 }

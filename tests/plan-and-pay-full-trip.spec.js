@@ -33,6 +33,7 @@ test.describe('Plan and pay a full multi-category trip', () => {
 
     // Step 4: fill traveler details and pay.
     await planner.fillTravelerDetails(traveler.name, traveler.email);
+    await planner.fillCardDetails();
     await planner.pay();
 
     // Step 5: confirmation with the booking summary and code.

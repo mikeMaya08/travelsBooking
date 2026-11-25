@@ -5,6 +5,8 @@ test.describe('Group trip and empty catalog searches', () => {
   test('empty search shows a message, clearing it restores the catalog and the user can still add an item', async ({ page }) => {
     const planner = new TripPlannerPage(page);
     await planner.open();
+    // Trip details are not prefilled: set them to unlock the catalog.
+    await planner.startTrip({ travelers: 1 });
 
     // Hotels is the default category; a term that matches nothing leaves the catalog empty.
     await planner.search('zzzz-no-such-hotel');

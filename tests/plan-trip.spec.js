@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 const addItem = async (page, tab, itemName) => {
   await page.getByRole('tab', { name: tab }).click();
   const card = page.getByRole('article').filter({ hasText: itemName });
-  await card.getByRole('button', { name: 'Add to trip' }).click();
+  await card.getByRole('button', { name: /^Add / }).click();
 };
 
 test('plan a full trip: hotel + flight + tour, pay and confirm', async ({ page }) => {

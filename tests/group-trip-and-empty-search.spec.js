@@ -39,7 +39,8 @@ test.describe('Group trip and empty catalog searches', () => {
     // The traveler count is capped at 10.
     await planner.setTravelers(99);
     await expect(planner.travelersInput).toHaveValue('10');
-    await planner.setTravelers(3);
+    // Trip details are not prefilled: set destination, dates and 3 travelers, then start planning.
+    await planner.startTrip({ travelers: 3 });
     await expect(planner.itinerary).toContainText('3 travelers');
 
     // Hotel is flat ($210); flight ($145 x 3) and tour ($36 x 3) are per person.

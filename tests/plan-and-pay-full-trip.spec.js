@@ -7,6 +7,8 @@ test.describe('Plan and pay a full multi-category trip', () => {
     const traveler = { name: 'Ana Torres', email: 'ana@example.com' };
 
     await planner.open();
+    // Destination, dates and travelers are not prefilled: set them to unlock the catalog.
+    await planner.startTrip({ travelers: 1 });
     await expect(planner.tripTotal).toHaveText('$0');
     await expect(planner.confirmTripButton).toBeDisabled();
 

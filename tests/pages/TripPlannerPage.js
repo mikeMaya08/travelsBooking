@@ -11,6 +11,9 @@ export class TripPlannerPage {
     // Checkout form
     this.fullNameInput = page.getByLabel('Full name');
     this.emailInput = page.getByLabel('Email');
+    this.cardNumberInput = page.getByLabel('Card number');
+    this.expiryInput = page.getByLabel('Expiry');
+    this.cvcInput = page.getByLabel('CVC');
     this.payButton = page.getByRole('button', { name: /^Pay/ });
 
     // Confirmation

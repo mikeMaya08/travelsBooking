@@ -57,6 +57,7 @@ test.describe('Group trip and empty catalog searches', () => {
     await planner.goToCheckout();
     await expect(planner.payButton).toHaveText('Pay $753');
     await planner.fillTravelerDetails('Ana Torres', 'ana@example.com');
+    await planner.fillCardDetails();
     await planner.pay();
 
     await expect(planner.confirmation).toContainText('Trip confirmed! 3 bookings for $753');

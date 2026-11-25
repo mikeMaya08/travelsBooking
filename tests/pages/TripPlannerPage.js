@@ -32,6 +32,28 @@ export class TripPlannerPage {
     await this.travelersInput.fill(String(count));
   }
 
+  async setDestination(label) {
+    await this.destinationSelect.selectOption({ label });
+  }
+
+  async setDates(arrival, departure) {
+    await this.arrivalInput.fill(arrival);
+    await this.departureInput.fill(departure);
+  }
+
+  // Submits the trip setup; the catalog stays disabled until this is done.
+  async submitTripSetup() {
+    await this.tripSearchButton.click();
+  }
+
+  // Trip details are no longer prefilled: choose destination, dates and travelers, then start planning.
+  async startTrip({ destination = 'Mexico City', arrival = '2026-12-10', departure = '2026-12-12', travelers = 1 } = {}) {
+    await this.setDestination(destination);
+    await this.setDates(arrival, departure);
+    await this.setTravelers(travelers);
+    await this.submitTripSetup();
+  }
+
   async search(term) {
     await this.searchInput.fill(term);
   }

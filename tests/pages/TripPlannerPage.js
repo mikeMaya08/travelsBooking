@@ -78,12 +78,14 @@ export class TripPlannerPage {
   // Switches to a category tab (e.g. "Hotels") and adds the named item to the trip.
   async addItem(category, itemName) {
     await this.page.getByRole('tab', { name: category }).click();
-    await this.itemCard(itemName).getByRole('button', { name: `Add ${itemName}` }).click();
+    // The card is already scoped to the item, so match the button by its "Add ..." prefix:
+    // the deployed app now labels it "Add to trip" instead of "Add <item>".
+    await this.itemCard(itemName).getByRole('button', { name: /^Add\b/ }).click();
   }
 
-  // Button shown on a card once the item is already in the trip.
+  // Button shown on a card once the item is already in the trip ("Added" / "<item> added").
   addedButton(itemName) {
-    return this.itemCard(itemName).getByRole('button', { name: `${itemName} added` });
+    return this.itemCard(itemName).getByRole('button', { name: /added/i });
   }
 
   // Entry for an item in the "My trip" itinerary.

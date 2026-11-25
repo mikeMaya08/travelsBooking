@@ -31,12 +31,14 @@ test.describe('Plan and pay a full multi-category trip', () => {
     await planner.goToCheckout();
     await expect(planner.payButton).toHaveText('Pay $405');
 
-    // Step 4: fill traveler details and pay.
+    // Step 4: fill traveler details and the demo (approved) card, then pay.
     await planner.fillTravelerDetails(traveler.name, traveler.email);
+    await planner.fillCardDetails();
     await planner.pay();
 
-    // Step 5: confirmation with the booking summary and code.
+    // Step 5: confirmation with the booking summary, approved payment and code.
     await expect(planner.confirmation).toContainText('Trip confirmed! 3 bookings for $405');
+    await expect(planner.confirmation).toContainText('Payment approved · card ending 4242');
     await expect(planner.bookingCode).toHaveText(/^WAY-[A-Z0-9]{6}$/);
     await expect(planner.confirmation).toContainText(`We sent the summary to ${traveler.email}`);
 

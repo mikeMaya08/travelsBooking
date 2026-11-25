@@ -3,66 +3,66 @@ import { test, expect } from '@playwright/test';
 const addItem = async (page, tab, itemName) => {
   await page.getByRole('tab', { name: tab }).click();
   const card = page.getByRole('article').filter({ hasText: itemName });
-  await card.getByRole('button', { name: 'Agregar al viaje' }).click();
+  await card.getByRole('button', { name: 'Add to trip' }).click();
 };
 
-test('planear un viaje completo: hotel + vuelo + tour, pagar y confirmar', async ({ page }) => {
+test('plan a full trip: hotel + flight + tour, pay and confirm', async ({ page }) => {
   await page.goto('/');
-  await addItem(page, 'Hoteles', 'Hotel Casa Reforma');
-  await addItem(page, 'Vuelos', 'Vuelo MTY → CDMX');
-  await addItem(page, 'Tours', 'Tour Teotihuacán al amanecer');
+  await addItem(page, 'Hotels', 'Hotel Casa Reforma');
+  await addItem(page, 'Flights', 'Flight MTY → MEX');
+  await addItem(page, 'Tours', 'Teotihuacan Sunrise Tour');
 
-  // 4200 + 2850 + 980 (1 viajero)
-  await expect(page.getByTestId('trip-total')).toHaveText(/8,030/);
+  // 210 + 145 + 50 (1 traveler)
+  await expect(page.getByTestId('trip-total')).toHaveText('$405');
 
-  await page.getByRole('button', { name: 'Confirmar viaje' }).click();
-  await page.getByLabel('Nombre completo').fill('Ana Torres');
-  await page.getByLabel('Correo electrónico').fill('ana@example.com');
-  await page.getByRole('button', { name: /^Pagar/ }).click();
+  await page.getByRole('button', { name: 'Confirm trip' }).click();
+  await page.getByLabel('Full name').fill('Ana Torres');
+  await page.getByLabel('Email').fill('ana@example.com');
+  await page.getByRole('button', { name: /^Pay/ }).click();
 
-  await expect(page.getByRole('status')).toContainText('¡Viaje confirmado! 3 reservaciones');
+  await expect(page.getByRole('status')).toContainText('Trip confirmed! 3 bookings');
   await expect(page.getByTestId('booking-code')).toHaveText(/^WAY-[A-Z0-9]{6}$/);
 });
 
-test('quitar un elemento recalcula el total', async ({ page }) => {
+test('removing an item recalculates the total', async ({ page }) => {
   await page.goto('/');
-  await addItem(page, 'Hoteles', 'Boutique Roma Norte');
-  await expect(page.getByTestId('trip-total')).toHaveText(/3,100/);
-  await page.getByRole('button', { name: 'Quitar Boutique Roma Norte' }).click();
-  await expect(page.getByTestId('trip-total')).toHaveText(/\$0/);
+  await addItem(page, 'Hotels', 'Boutique Roma Norte');
+  await expect(page.getByTestId('trip-total')).toHaveText('$155');
+  await page.getByRole('button', { name: 'Remove Boutique Roma Norte' }).click();
+  await expect(page.getByTestId('trip-total')).toHaveText('$0');
 });
 
-test('más viajeros multiplica solo lo que es por persona', async ({ page }) => {
+test('more travelers only multiplies per-person items', async ({ page }) => {
   await page.goto('/');
-  await page.getByLabel('Viajeros').fill('2');
-  await addItem(page, 'Hoteles', 'Hotel Casa Reforma'); // fijo: 4,200
-  await addItem(page, 'Tours', 'Xochimilco en trajinera'); // 720 x 2
-  await expect(page.getByTestId('trip-total')).toHaveText(/5,640/);
+  await page.getByLabel('Travelers').fill('2');
+  await addItem(page, 'Hotels', 'Hotel Casa Reforma'); // flat: $210
+  await addItem(page, 'Tours', 'Xochimilco Boat Ride'); // $36 x 2
+  await expect(page.getByTestId('trip-total')).toHaveText('$282');
 });
 
-test('buscar y ordenar el catálogo', async ({ page }) => {
+test('search and sort the catalog', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('tab', { name: 'Tours' }).click();
-  await page.getByLabel('Buscar').fill('xochi');
+  await page.getByLabel('Search').fill('xochi');
   await expect(page.getByRole('article')).toHaveCount(1);
-  await page.getByLabel('Buscar').fill('');
-  await page.getByLabel('Ordenar').selectOption('price-asc');
+  await page.getByLabel('Search').fill('');
+  await page.getByLabel('Sort by').selectOption('price-asc');
   await expect(page.getByRole('article').first()).toContainText('Xochimilco');
 });
 
-test('cambiar de destino muestra su catálogo y limpia el viaje', async ({ page }) => {
+test('changing destination shows its catalog and clears the trip', async ({ page }) => {
   await page.goto('/');
-  await addItem(page, 'Hoteles', 'Hotel Casa Reforma');
-  await page.getByLabel('Destino').selectOption('cun');
-  await expect(page.getByTestId('trip-total')).toHaveText(/\$0/);
-  await expect(page.getByRole('article').filter({ hasText: 'Resort Laguna Azul' })).toBeVisible();
+  await addItem(page, 'Hotels', 'Hotel Casa Reforma');
+  await page.getByLabel('Destination').selectOption('cun');
+  await expect(page.getByTestId('trip-total')).toHaveText('$0');
+  await expect(page.getByRole('article').filter({ hasText: 'Laguna Azul Resort' })).toBeVisible();
 });
 
-test('el checkout valida nombre y correo', async ({ page }) => {
+test('checkout validates name and email', async ({ page }) => {
   await page.goto('/');
-  await addItem(page, 'Hoteles', 'Hotel Casa Reforma');
-  await page.getByRole('button', { name: 'Confirmar viaje' }).click();
-  await page.getByLabel('Correo electrónico').fill('no-es-correo');
-  await page.getByRole('button', { name: /^Pagar/ }).click();
+  await addItem(page, 'Hotels', 'Hotel Casa Reforma');
+  await page.getByRole('button', { name: 'Confirm trip' }).click();
+  await page.getByLabel('Email').fill('not-an-email');
+  await page.getByRole('button', { name: /^Pay/ }).click();
   await expect(page.getByRole('alert')).toHaveCount(2);
 });

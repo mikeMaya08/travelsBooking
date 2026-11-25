@@ -1,56 +1,56 @@
-# Video C — Walkthrough de un PR real (3–5 min)
+# Video C — Real PR Walkthrough (3–5 min)
 
-App: **Wayfarer**, planeador de viajes (hoteles, vuelos, autos, tours, boletos, restaurantes, traslados).
-Repo local con 3 estados, todos listos para mostrar:
+App: **Wayfarer**, a trip planner (hotels, flights, cars, tours, tickets, dining, transfers). English UI, prices in USD.
+Local repo with 3 states, all ready to show:
 
-| Rama | Qué es |
+| Branch | What it is |
 |---|---|
-| `main` | App prototipo completa, 6 tests Playwright en verde |
-| `feat/quick-add-button` | **El PR**: botón "Agregar al viaje" → "+ Añadir" (cambia copy y aria-label) |
-| `proposal/fix-quick-add-locators` | **La reparación propuesta** (solo para revisión, no se mergea sola) |
+| `main` | Full prototype app, 6 Playwright tests passing |
+| `feat/quick-add-button` | **The PR**: "Add to trip" button → "+ Add" (changes visible text and aria-label) |
+| `proposal/fix-quick-add-locators` | **The proposed repair** (for review only, never auto-merged) |
 
-## Guion (≈4:15)
+## Script (≈4:15)
 
-**0:00–0:25 · Contexto**
-Mostrar la app (`npm run dev`), agregar un hotel, un vuelo y un tour; confirmar viaje.
-"Esta es Wayfarer. El flujo crítico: armar un viaje con varias categorías y confirmarlo. Tiene 6 tests E2E en Playwright, todo en verde en `main`."
+**0:00–0:25 · Context**
+Show the app (`npm run dev`): add a hotel, a flight and a tour; confirm the trip.
+"This is Wayfarer. The critical flow: build a trip across several categories and confirm it. It has 6 Playwright E2E tests, all green on `main`."
 
-**0:25–1:05 · El cambio (el PR)**
+**0:25–1:05 · The change (the PR)**
 `git diff main..feat/quick-add-button -- src/App.jsx`
-"Este PR hace el botón más compacto: de 'Agregar al viaje' a '+ Añadir'. Cambia el texto visible y el aria-label. Parece un cambio de copy, pero toca el contrato por el que los tests encuentran el botón."
+"This PR makes the button more compact: from 'Add to trip' to '+ Add'. It changes the visible text and the aria-label. It looks like a copy tweak, but it touches the contract the tests use to find the button."
 
-**1:05–1:50 · Qué flujo se elige para probar**
-Explicar el razonamiento: el diff toca `ItemCard`, que se usa en TODAS las categorías y es el paso 1 de cualquier reserva. Por eso se elige primero `planear un viaje completo` (3 categorías + total + pago + confirmación). El resto de la suite también se corre; los tests de búsqueda/orden no usan el botón y deben seguir en verde, lo que ayuda a acotar el daño.
+**1:05–1:50 · Which flow to test**
+Explain the reasoning: the diff touches `ItemCard`, used in EVERY category and step 1 of any booking. So the first pick is `plan a full trip` (3 categories + total + payment + confirmation). The rest of the suite also runs; the search/sort test doesn't use the button and should stay green, which helps bound the damage.
 
-**1:50–2:40 · Corrida de Playwright**
-`npx playwright test` → 5 de 6 tests fallan por timeout (~30 s c/u); solo "buscar y ordenar" pasa, porque no toca el botón.
-Mostrar el call log: `waiting for getByRole('button', { name: 'Agregar al viaje' })`.
-Abrir el trace: `npx playwright show-trace test-results/*/trace.zip` y el screenshot de falla.
+**1:50–2:40 · Playwright run**
+`npx playwright test` → 5 of 6 tests time out (~30 s each); only "search and sort" passes because it never touches the button.
+Show the call log: `waiting for getByRole('button', { name: 'Add to trip' })`.
+Open the trace: `npx playwright show-trace test-results/*/trace.zip` and the failure screenshot.
 
-**2:40–3:25 · Diagnóstico**
-Preguntas que se responden con evidencia:
-- ¿La app está rota? No: en el screenshot se ve el catálogo y el botón "+ Añadir" funciona.
-- ¿Es un bug del producto o del test? **Del test** (locator desactualizado): el cambio de copy fue intencional.
-- Clasificación: *test drift*, riesgo bajo, causa raíz = locator por texto.
-- Nota de honestidad: si el botón hubiera desaparecido o no respondiera, sería un bug real y NO se parchearía el test.
+**2:40–3:25 · Diagnosis**
+Questions answered with evidence:
+- Is the app broken? No: the screenshot shows the catalog and the "+ Add" button works.
+- Product bug or test bug? **Test** (stale locator): the copy change was intentional.
+- Classification: *test drift*, low risk, root cause = text-based locator.
+- Honesty note: if the button had vanished or stopped responding, it would be a real bug and the test would NOT be patched.
 
-**3:25–4:10 · Propuesta de reparación (para revisión)**
+**3:25–4:10 · Proposed repair (for review)**
 `git diff feat/quick-add-button..proposal/fix-quick-add-locators`
-Cambio de 1 línea (el helper `addItem` lo usan todos los tests): `{ name: 'Agregar al viaje' }` → `{ name: /^Añadir/ }`. Se corre en la rama de propuesta: 6/6 en verde.
-"Esto no se mergea solo: queda como propuesta para que una persona revise. Ella decide si acepta el nuevo locator o prefiere un `data-testid` más estable."
+One-line change (the `addItem` helper is used by every test): `{ name: 'Add to trip' }` → `{ name: /^Add / }`. Run on the proposal branch: 6/6 green.
+"This does not merge itself: it stays a proposal for a person to review. They decide whether to accept the new locator or prefer a more stable `data-testid`."
 
-**4:10–4:30 · Cierre**
-Resumen del handoff: cambio → flujo elegido → corrida → diagnóstico → propuesta revisable.
+**4:10–4:30 · Wrap-up**
+Handoff recap: change → chosen flow → run → diagnosis → reviewable proposal.
 
-## Comandos del día de grabación
+## Recording-day commands
 
 ```bash
 cd ~/Documents/travelsBooking
-git checkout main && npx playwright test            # verde
-git checkout feat/quick-add-button && npx playwright test   # rojo
+git checkout main && npx playwright test                    # green
+git checkout feat/quick-add-button && npx playwright test   # red
 npx playwright show-trace test-results/*/trace.zip
 git diff feat/quick-add-button..proposal/fix-quick-add-locators
-git checkout proposal/fix-quick-add-locators && npx playwright test   # verde
+git checkout proposal/fix-quick-add-locators && npx playwright test   # green
 ```
 
-Tip: baja `timeout` a 8 s en `playwright.config.js` mientras grabas para que la falla no tarde 30 s.
+Tip: lower `timeout` to 8 s in `playwright.config.js` while recording so the failure doesn't take 30 s.

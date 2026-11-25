@@ -1,49 +1,49 @@
 export const CITIES = [
-  { id: 'cdmx', label: 'Ciudad de México' },
-  { id: 'cun', label: 'Cancún' },
+  { id: 'cdmx', label: 'Mexico City' },
+  { id: 'cun', label: 'Cancun' },
 ];
 
 export const CATEGORIES = [
-  { id: 'hotels', label: 'Hoteles', icon: '🏨' },
-  { id: 'flights', label: 'Vuelos', icon: '✈️' },
-  { id: 'cars', label: 'Autos', icon: '🚗' },
+  { id: 'hotels', label: 'Hotels', icon: '🏨' },
+  { id: 'flights', label: 'Flights', icon: '✈️' },
+  { id: 'cars', label: 'Cars', icon: '🚗' },
   { id: 'tours', label: 'Tours', icon: '🧭' },
-  { id: 'tickets', label: 'Boletos', icon: '🎟️' },
-  { id: 'dining', label: 'Restaurantes', icon: '🍽️' },
-  { id: 'transfers', label: 'Traslados', icon: '🚕' },
+  { id: 'tickets', label: 'Tickets', icon: '🎟️' },
+  { id: 'dining', label: 'Dining', icon: '🍽️' },
+  { id: 'transfers', label: 'Transfers', icon: '🚕' },
 ];
 
-// perPerson: el precio se multiplica por el número de viajeros.
+// perPerson: price is multiplied by the number of travelers.
 export const ITEMS = [
   // CDMX
-  { id: 'h1', city: 'cdmx', cat: 'hotels', name: 'Hotel Casa Reforma', meta: '3 noches · Desayuno incluido', price: 4200, rating: 4.7 },
-  { id: 'h2', city: 'cdmx', cat: 'hotels', name: 'Boutique Roma Norte', meta: '3 noches · Terraza', price: 3100, rating: 4.5 },
-  { id: 'f1', city: 'cdmx', cat: 'flights', name: 'Vuelo MTY → CDMX', meta: 'Ida y vuelta · Directo', price: 2850, rating: 4.3, perPerson: true },
-  { id: 'f2', city: 'cdmx', cat: 'flights', name: 'Vuelo GDL → CDMX', meta: 'Ida y vuelta · Directo', price: 2400, rating: 4.1, perPerson: true },
-  { id: 'c1', city: 'cdmx', cat: 'cars', name: 'Renta compacto 3 días', meta: 'Aeropuerto CDMX', price: 1650, rating: 4.2 },
-  { id: 't1', city: 'cdmx', cat: 'tours', name: 'Tour Teotihuacán al amanecer', meta: '6 horas · Guía bilingüe', price: 980, rating: 4.9, perPerson: true },
-  { id: 't2', city: 'cdmx', cat: 'tours', name: 'Xochimilco en trajinera', meta: '3 horas', price: 720, rating: 4.4, perPerson: true },
-  { id: 'k1', city: 'cdmx', cat: 'tickets', name: 'Museo Frida Kahlo', meta: 'Entrada general', price: 350, rating: 4.6, perPerson: true },
-  { id: 'k2', city: 'cdmx', cat: 'tickets', name: 'Partido Estadio Azteca', meta: 'Zona preferente', price: 1900, rating: 4.8, perPerson: true },
-  { id: 'd1', city: 'cdmx', cat: 'dining', name: 'Cena en Pujol', meta: 'Menú degustación', price: 2400, rating: 4.9, perPerson: true },
-  { id: 'd2', city: 'cdmx', cat: 'dining', name: 'Tacos en El Califa', meta: 'Cena casual', price: 280, rating: 4.4, perPerson: true },
-  { id: 'r1', city: 'cdmx', cat: 'transfers', name: 'Chofer privado aeropuerto', meta: 'Sedán · 1 trayecto', price: 650, rating: 4.7 },
-  // Cancún
-  { id: 'h3', city: 'cun', cat: 'hotels', name: 'Resort Laguna Azul', meta: '4 noches · Todo incluido', price: 9800, rating: 4.8 },
-  { id: 'h4', city: 'cun', cat: 'hotels', name: 'Hotel Zona Centro', meta: '4 noches', price: 3600, rating: 4.0 },
-  { id: 'f3', city: 'cun', cat: 'flights', name: 'Vuelo CDMX → Cancún', meta: 'Ida y vuelta · Directo', price: 3300, rating: 4.4, perPerson: true },
-  { id: 'c2', city: 'cun', cat: 'cars', name: 'Renta SUV 4 días', meta: 'Aeropuerto CUN', price: 2900, rating: 4.3 },
-  { id: 't3', city: 'cun', cat: 'tours', name: 'Snorkel en Isla Mujeres', meta: '5 horas · Catamarán', price: 1250, rating: 4.8, perPerson: true },
-  { id: 't4', city: 'cun', cat: 'tours', name: 'Chichén Itzá + cenote', meta: 'Día completo', price: 1450, rating: 4.7, perPerson: true },
-  { id: 'k3', city: 'cun', cat: 'tickets', name: 'Parque Xcaret', meta: 'Entrada general', price: 2100, rating: 4.9, perPerson: true },
-  { id: 'd3', city: 'cun', cat: 'dining', name: 'Cena frente al mar', meta: 'Mariscos · Terraza', price: 950, rating: 4.5, perPerson: true },
-  { id: 'r2', city: 'cun', cat: 'transfers', name: 'Taxi aeropuerto → zona hotelera', meta: '1 trayecto', price: 520, rating: 4.1 },
+  { id: 'h1', city: 'cdmx', cat: 'hotels', name: 'Hotel Casa Reforma', meta: '3 nights · Breakfast included', price: 210, rating: 4.7 },
+  { id: 'h2', city: 'cdmx', cat: 'hotels', name: 'Boutique Roma Norte', meta: '3 nights · Rooftop terrace', price: 155, rating: 4.5 },
+  { id: 'f1', city: 'cdmx', cat: 'flights', name: 'Flight MTY → MEX', meta: 'Round trip · Nonstop', price: 145, rating: 4.3, perPerson: true },
+  { id: 'f2', city: 'cdmx', cat: 'flights', name: 'Flight GDL → MEX', meta: 'Round trip · Nonstop', price: 120, rating: 4.1, perPerson: true },
+  { id: 'c1', city: 'cdmx', cat: 'cars', name: 'Compact car rental, 3 days', meta: 'Mexico City Airport', price: 85, rating: 4.2 },
+  { id: 't1', city: 'cdmx', cat: 'tours', name: 'Teotihuacan Sunrise Tour', meta: '6 hours · Bilingual guide', price: 50, rating: 4.9, perPerson: true },
+  { id: 't2', city: 'cdmx', cat: 'tours', name: 'Xochimilco Boat Ride', meta: '3 hours', price: 36, rating: 4.4, perPerson: true },
+  { id: 'k1', city: 'cdmx', cat: 'tickets', name: 'Frida Kahlo Museum', meta: 'General admission', price: 18, rating: 4.6, perPerson: true },
+  { id: 'k2', city: 'cdmx', cat: 'tickets', name: 'Match at Estadio Azteca', meta: 'Premium seating', price: 95, rating: 4.8, perPerson: true },
+  { id: 'd1', city: 'cdmx', cat: 'dining', name: 'Dinner at Pujol', meta: 'Tasting menu', price: 120, rating: 4.9, perPerson: true },
+  { id: 'd2', city: 'cdmx', cat: 'dining', name: 'Tacos at El Califa', meta: 'Casual dinner', price: 14, rating: 4.4, perPerson: true },
+  { id: 'r1', city: 'cdmx', cat: 'transfers', name: 'Private airport driver', meta: 'Sedan · 1 trip', price: 33, rating: 4.7 },
+  // Cancun
+  { id: 'h3', city: 'cun', cat: 'hotels', name: 'Laguna Azul Resort', meta: '4 nights · All-inclusive', price: 490, rating: 4.8 },
+  { id: 'h4', city: 'cun', cat: 'hotels', name: 'Downtown Hotel', meta: '4 nights', price: 180, rating: 4.0 },
+  { id: 'f3', city: 'cun', cat: 'flights', name: 'Flight MEX → Cancun', meta: 'Round trip · Nonstop', price: 165, rating: 4.4, perPerson: true },
+  { id: 'c2', city: 'cun', cat: 'cars', name: 'SUV rental, 4 days', meta: 'Cancun Airport', price: 145, rating: 4.3 },
+  { id: 't3', city: 'cun', cat: 'tours', name: 'Snorkeling at Isla Mujeres', meta: '5 hours · Catamaran', price: 62, rating: 4.8, perPerson: true },
+  { id: 't4', city: 'cun', cat: 'tours', name: 'Chichen Itza + Cenote', meta: 'Full day', price: 72, rating: 4.7, perPerson: true },
+  { id: 'k3', city: 'cun', cat: 'tickets', name: 'Xcaret Park', meta: 'General admission', price: 105, rating: 4.9, perPerson: true },
+  { id: 'd3', city: 'cun', cat: 'dining', name: 'Beachfront Dinner', meta: 'Seafood · Terrace', price: 48, rating: 4.5, perPerson: true },
+  { id: 'r2', city: 'cun', cat: 'transfers', name: 'Airport Taxi → Hotel Zone', meta: '1 trip', price: 26, rating: 4.1 },
 ];
 
 export const itemTotal = (item, travelers) => item.price * (item.perPerson ? travelers : 1);
 
-export const formatMXN = (n) =>
-  new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(n);
+export const formatUSD = (n) =>
+  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n);
 
 export const daysBetween = (start, end) => {
   const ms = new Date(end) - new Date(start);

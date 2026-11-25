@@ -1,4 +1,4 @@
-// API simulada (sin backend): latencia artificial y reglas de negocio mínimas.
+// Mock API (no backend): artificial latency and minimal business rules.
 import { ITEMS } from './data.js';
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));

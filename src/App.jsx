@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { CATEGORIES, CITIES, ITEMS, daysBetween, formatMXN, itemTotal } from './data.js';
+import { CATEGORIES, CITIES, ITEMS, daysBetween, formatUSD, itemTotal } from './data.js';
 import { createBooking, searchItems } from './api.js';
 
 const STORAGE_KEY = 'wayfarer:v1';
@@ -16,13 +16,13 @@ function ItemCard({ item, added, travelers, onAdd }) {
       <div>
         <h3>{item.name}</h3>
         <p className="meta">{item.meta}</p>
-        <p className="meta">★ {item.rating}{item.perPerson ? ' · precio por persona' : ''}</p>
+        <p className="meta">★ {item.rating}{item.perPerson ? ' · price per person' : ''}</p>
       </div>
       <div className="card-foot">
-        <strong>{formatMXN(item.price)}</strong>
-        {item.perPerson && travelers > 1 && <span className="meta">{formatMXN(itemTotal(item, travelers))} total</span>}
+        <strong>{formatUSD(item.price)}</strong>
+        {item.perPerson && travelers > 1 && <span className="meta">{formatUSD(itemTotal(item, travelers))} total</span>}
         <button className="btn" onClick={() => onAdd(item)} disabled={added}>
-          {added ? 'Agregado' : 'Agregar al viaje'}
+          {added ? 'Added' : 'Add to trip'}
         </button>
       </div>
     </article>
@@ -35,23 +35,23 @@ function Checkout({ total, onBack, onPay, busy }) {
   const submit = (e) => {
     e.preventDefault();
     const next = {};
-    if (!form.name.trim()) next.name = 'Escribe tu nombre completo';
-    if (!/^\S+@\S+\.\S+$/.test(form.email)) next.email = 'Correo no válido';
+    if (!form.name.trim()) next.name = 'Enter your full name';
+    if (!/^\S+@\S+\.\S+$/.test(form.email)) next.email = 'Invalid email';
     setErrors(next);
     if (!Object.keys(next).length) onPay(form);
   };
   return (
     <form onSubmit={submit} noValidate className="checkout">
-      <label>Nombre completo
+      <label>Full name
         <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
       </label>
       {errors.name && <p role="alert" className="err">{errors.name}</p>}
-      <label>Correo electrónico
+      <label>Email
         <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
       </label>
       {errors.email && <p role="alert" className="err">{errors.email}</p>}
-      <button className="btn primary" disabled={busy}>{busy ? 'Procesando…' : `Pagar ${formatMXN(total)}`}</button>
-      <button type="button" className="link-btn" onClick={onBack}>← Volver al viaje</button>
+      <button className="btn primary" disabled={busy}>{busy ? 'Processing…' : `Pay ${formatUSD(total)}`}</button>
+      <button type="button" className="link-btn" onClick={onBack}>← Back to trip</button>
     </form>
   );
 }
@@ -109,28 +109,28 @@ export default function App() {
     <div className="layout">
       <header>
         <h1>Wayfarer</h1>
-        <p>Planea todo tu viaje en un solo lugar</p>
+        <p>Plan your whole trip in one place</p>
       </header>
 
-      <section className="setup" aria-label="Datos del viaje">
-        <label>Destino
+      <section className="setup" aria-label="Trip details">
+        <label>Destination
           <select value={city} onChange={(e) => changeCity(e.target.value)}>
             {CITIES.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
           </select>
         </label>
-        <label>Llegada
+        <label>Arrival
           <input type="date" value={start} max={end} onChange={(e) => setStart(e.target.value)} />
         </label>
-        <label>Salida
+        <label>Departure
           <input type="date" value={end} min={start} onChange={(e) => setEnd(e.target.value)} />
         </label>
-        <label>Viajeros
+        <label>Travelers
           <input type="number" min="1" max="10" value={travelers}
             onChange={(e) => setTravelers(Math.min(10, Math.max(1, Number(e.target.value) || 1)))} />
         </label>
       </section>
 
-      <nav className="tabs" aria-label="Categorías">
+      <nav className="tabs" aria-label="Categories">
         {CATEGORIES.map((c) => (
           <button key={c.id} role="tab" aria-selected={cat === c.id}
             className={cat === c.id ? 'tab active' : 'tab'} onClick={() => setCat(c.id)}>
@@ -142,32 +142,32 @@ export default function App() {
       <main>
         <section className="catalog">
           <div className="filters">
-            <input type="search" placeholder="Buscar…" aria-label="Buscar" value={q} onChange={(e) => setQ(e.target.value)} />
-            <select aria-label="Ordenar" value={sort} onChange={(e) => setSort(e.target.value)}>
-              <option value="relevance">Relevancia</option>
-              <option value="price-asc">Precio: menor a mayor</option>
-              <option value="price-desc">Precio: mayor a menor</option>
-              <option value="rating">Mejor calificados</option>
+            <input type="search" placeholder="Search…" aria-label="Search" value={q} onChange={(e) => setQ(e.target.value)} />
+            <select aria-label="Sort by" value={sort} onChange={(e) => setSort(e.target.value)}>
+              <option value="relevance">Relevance</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+              <option value="rating">Top rated</option>
             </select>
           </div>
-          {loading && <p className="meta" role="progressbar">Cargando…</p>}
-          {!loading && results.length === 0 && <p className="meta">Sin resultados para tu búsqueda.</p>}
+          {loading && <p className="meta" role="progressbar">Loading…</p>}
+          {!loading && results.length === 0 && <p className="meta">No results for your search.</p>}
           {!loading && results.map((item) => (
             <ItemCard key={item.id} item={item} travelers={travelers}
               added={trip.some((t) => t.id === item.id)} onAdd={add} />
           ))}
         </section>
 
-        <aside className="itinerary" aria-label="Mi viaje">
-          <h2>Mi viaje</h2>
-          <p className="meta">{CITIES.find((c) => c.id === city).label} · {days} días · {travelers} {travelers === 1 ? 'viajero' : 'viajeros'}</p>
+        <aside className="itinerary" aria-label="My trip">
+          <h2>My trip</h2>
+          <p className="meta">{CITIES.find((c) => c.id === city).label} · {days} days · {travelers} {travelers === 1 ? 'traveler' : 'travelers'}</p>
 
           {step === 'done' && booking && (
             <div role="status" className="ok">
-              <p>¡Viaje confirmado! {booking.count} reservaciones por {formatMXN(booking.total)}.</p>
-              <p>Código: <strong data-testid="booking-code">{booking.code}</strong></p>
-              <p className="meta">Enviamos el resumen a {booking.email}.</p>
-              <button className="btn" onClick={reset}>Planear otro viaje</button>
+              <p>Trip confirmed! {booking.count} bookings for {formatUSD(booking.total)}.</p>
+              <p>Code: <strong data-testid="booking-code">{booking.code}</strong></p>
+              <p className="meta">We sent the summary to {booking.email}.</p>
+              <button className="btn" onClick={reset}>Plan another trip</button>
             </div>
           )}
 
@@ -177,22 +177,22 @@ export default function App() {
 
           {step === 'plan' && (
             <>
-              {trip.length === 0 && <p className="meta">Aún no agregas nada.</p>}
+              {trip.length === 0 && <p className="meta">Nothing added yet.</p>}
               {Array.from({ length: days }, (_, d) => d + 1).map((day) => {
                 const list = tripItems.filter((i) => i.day === day);
                 if (!list.length) return null;
                 return (
                   <div key={day} className="day">
-                    <h4>Día {day}</h4>
+                    <h4>Day {day}</h4>
                     <ul>
                       {list.map((i) => (
                         <li key={i.id}>
                           <span>{i.name}</span>
-                          <span>{formatMXN(itemTotal(i, travelers))}</span>
-                          <select aria-label={`Día de ${i.name}`} value={i.day} onChange={(e) => setDay(i.id, Number(e.target.value))}>
-                            {Array.from({ length: days }, (_, d) => <option key={d} value={d + 1}>Día {d + 1}</option>)}
+                          <span>{formatUSD(itemTotal(i, travelers))}</span>
+                          <select aria-label={`Day for ${i.name}`} value={i.day} onChange={(e) => setDay(i.id, Number(e.target.value))}>
+                            {Array.from({ length: days }, (_, d) => <option key={d} value={d + 1}>Day {d + 1}</option>)}
                           </select>
-                          <button className="link" aria-label={`Quitar ${i.name}`} onClick={() => remove(i.id)}>✕</button>
+                          <button className="link" aria-label={`Remove ${i.name}`} onClick={() => remove(i.id)}>✕</button>
                         </li>
                       ))}
                     </ul>
@@ -201,10 +201,10 @@ export default function App() {
               })}
               <div className="total">
                 <span>Total</span>
-                <strong data-testid="trip-total">{formatMXN(total)}</strong>
+                <strong data-testid="trip-total">{formatUSD(total)}</strong>
               </div>
               <button className="btn primary" disabled={trip.length === 0} onClick={() => setStep('checkout')}>
-                Confirmar viaje
+                Confirm trip
               </button>
             </>
           )}
